@@ -1,0 +1,26 @@
+Name:                   gloss-accelerate
+Version:                1.7.8.0
+Synopsis:               Extras to interface Gloss and Accelerate
+Description:            Extras to interface Gloss and Accelerate
+License:                BSD3
+License-file:           LICENSE
+Author:                 Trevor L. McDonell
+Maintainer:             tmcdonell@cse.unsw.edu.au
+Category:               Graphics
+Build-type:             Simple
+Cabal-version:          >=1.10
+
+Library
+  Exposed-modules:
+        Graphics.Gloss.Data.Accelerate.Color
+        Graphics.Gloss.Data.Accelerate.Point
+
+  Build-depends:
+        base                    == 4.6.*,
+        accelerate              == 0.14.*,
+        gloss                   == 1.7.8.*
+
+  ghc-options:
+        -Wall -O2
+
+-- vim: nospell

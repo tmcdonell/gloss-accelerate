@@ -18,6 +18,7 @@ Flag cuda
 Library
   Exposed-modules:
         Graphics.Gloss.Data.Accelerate.Color
+        Graphics.Gloss.Data.Accelerate.Picture
         Graphics.Gloss.Data.Accelerate.Point
         Graphics.Gloss.Data.Accelerate.Render
 

@@ -6,7 +6,7 @@
 {-# LANGUAGE TypeFamilies          #-}
 {-# LANGUAGE UndecidableInstances  #-}
 
-module Graphics.Gloss.Data.Accelerate.Point (
+module Graphics.Gloss.Accelerate.Data.Point (
 
   -- ** Point data type
   Point,

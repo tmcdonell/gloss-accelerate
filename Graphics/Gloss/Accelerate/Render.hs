@@ -2,7 +2,7 @@
 
 -- | Accelerate backends we know about.
 --
-module Graphics.Gloss.Data.Accelerate.Render
+module Graphics.Gloss.Accelerate.Render
   where
 
 import Data.Array.Accelerate                            ( Arrays, Acc )

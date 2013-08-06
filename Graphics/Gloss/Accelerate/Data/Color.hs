@@ -9,7 +9,7 @@
 -- | Predefined and custom colors. Essentially equivalent to the
 -- "Graphics.Gloss.Data.Color", but lifted to Accelerate types.
 --
-module Graphics.Gloss.Data.Accelerate.Color (
+module Graphics.Gloss.Accelerate.Data.Color (
 
   -- ** Color data type
   Color,

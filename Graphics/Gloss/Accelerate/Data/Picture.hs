@@ -1,5 +1,5 @@
 
-module Graphics.Gloss.Data.Accelerate.Picture
+module Graphics.Gloss.Accelerate.Data.Picture
   where
 
 -- Standard library

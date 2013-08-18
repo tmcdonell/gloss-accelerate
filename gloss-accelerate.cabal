@@ -1,5 +1,5 @@
 Name:                   gloss-accelerate
-Version:                1.7.8.0
+Version:                1.8.0.0
 Synopsis:               Extras to interface Gloss and Accelerate
 Description:            Extras to interface Gloss and Accelerate
 License:                BSD3
@@ -24,7 +24,7 @@ Library
   Build-depends:
         base                    == 4.6.*,
         accelerate              >= 0.14,
-        gloss                   == 1.7.8.*
+        gloss                   == 1.8.0.*
 
   if flag(cuda)
     cpp-options:                -DACCELERATE_CUDA_BACKEND

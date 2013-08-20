@@ -22,8 +22,8 @@ module Graphics.Gloss.Accelerate.Data.Color (
   -- ** Color functions
   mixColors,
   addColors,
-  dim, bright,
-  light, dark,
+  dim, brighten,
+  lighten, darken,
   opaque,
 
   -- ** Pre-defined colors
@@ -245,30 +245,35 @@ addColors c1 c2
     normaliseColor $ rawColor (r1 + r2) (g1 + g2) (b1 + b2) ((a1 + a2) / 2)
 
 -- | Make a dimmer version of a color, scaling towards black.
+--
 dim :: Exp Color -> Exp Color
 dim c
   = let RGBA r g b a            = unlift c
     in  rawColor (r / 1.2) (g / 1.2) (b / 1.2) a
 
 -- | Make a brighter version of a color, scaling towards white.
-bright :: Exp Color -> Exp Color
-bright c
+--
+brighten :: Exp Color -> Exp Color
+brighten c
   = let RGBA r g b a            = unlift c
     in clampColor $ rawColor (r * 1.2) (g * 1.2) (b * 1.2) a
 
 -- | Lighten a color, adding white.
-light :: Exp Color -> Exp Color
-light c
+--
+lighten :: Exp Color -> Exp Color
+lighten c
   = let RGBA r g b a            = unlift c
     in  clampColor $ rawColor (r + 0.2) (g + 0.2) (b + 0.2) a
 
 -- | Darken a color, adding black.
-dark :: Exp Color -> Exp Color
-dark c
+--
+darken :: Exp Color -> Exp Color
+darken c
   = let RGBA r g b a            = unlift c
     in  clampColor $ rawColor (r - 0.2) (g - 0.2) (b - 0.2) a
 
 -- | Make a colour completely opaque.
+--
 opaque :: Exp Color -> Exp Color
 opaque c
   = let RGBA r g b _            = unlift c

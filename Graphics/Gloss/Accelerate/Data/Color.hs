@@ -12,7 +12,7 @@
 module Graphics.Gloss.Accelerate.Data.Color (
 
   -- ** Color data type
-  Color,
+  Color, RGBA(..),
   makeColor,
   makeColor8,
   rawColor,

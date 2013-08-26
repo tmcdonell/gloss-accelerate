@@ -18,6 +18,7 @@ module Graphics.Gloss.Accelerate.Data.Color (
   rawColor,
   rgbaOfColor,
   packRGBA, packABGR,
+  clampColor,
 
   -- ** Color functions
   mixColors,

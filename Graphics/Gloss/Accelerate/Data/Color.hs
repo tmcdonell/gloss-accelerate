@@ -88,6 +88,15 @@ instance Num a => Num (RGBA a) where
         = let f = fromInteger i
           in  RGBA f f f 1
 
+instance (Elt a, IsNum a) => Num (Exp (RGBA a)) where
+  (+)           = lift2 ((+) :: RGBA (Exp a) -> RGBA (Exp a) -> RGBA (Exp a))
+  (-)           = lift2 ((-) :: RGBA (Exp a) -> RGBA (Exp a) -> RGBA (Exp a))
+  (*)           = lift2 ((*) :: RGBA (Exp a) -> RGBA (Exp a) -> RGBA (Exp a))
+  abs           = lift1 (abs :: RGBA (Exp a) -> RGBA (Exp a))
+  signum        = lift1 (signum :: RGBA (Exp a) -> RGBA (Exp a))
+  fromInteger i = let f = constant (fromInteger i)
+                      a = constant 1
+                  in lift $ RGBA f f f a
 
 -- Represent colours in Accelerate as a 4-tuple
 --

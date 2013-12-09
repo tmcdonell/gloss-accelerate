@@ -12,7 +12,7 @@
 module Graphics.Gloss.Accelerate.Data.Color (
 
   -- ** Color data type
-  Color, RGBA(..),
+  Color, RGB(..), RGBA(..),
   makeColor,
   makeColor8,
   rawColor,
@@ -113,12 +113,12 @@ instance Elt a => Elt (RGBA a) where
   fromElt' (RGBA r g b a)       = fromElt' (r,g,b,a)
 
 instance IsTuple (RGBA a) where
-  type TupleRepr (RGBA a) = (((((),a), a), a), a)
+  type TupleRepr (RGBA a)       = (((((),a), a), a), a)
   fromTuple (RGBA r g b a)      = (((((), r), g), b), a)
   toTuple (((((),r),g),b),a)    = RGBA r g b a
 
 instance (Lift Exp a, Elt (Plain a)) => Lift Exp (RGBA a) where
-  type Plain (RGBA a) = RGBA (Plain a)
+  type Plain (RGBA a)   = RGBA (Plain a)
   lift (RGBA r g b a)   = Exp . Tuple $ NilTup `SnocTup` lift r `SnocTup` lift g
                                                `SnocTup` lift b `SnocTup` lift a
 
@@ -128,6 +128,71 @@ instance Elt a => Unlift Exp (RGBA (Exp a)) where
                       b = Exp $ SuccTupIdx ZeroTupIdx `Prj` c
                       a = Exp $ ZeroTupIdx `Prj` c
                   in RGBA r g b a
+
+
+-- | Same as 'RGBA', but colours don't have an alpha component.
+--
+data RGB a = RGB a a a
+  deriving (Show, Eq, Typeable)
+
+
+instance Num a => Num (RGB a) where
+  (+) (RGB r1 g1 b1 ) (RGB r2 g2 b2)
+        = RGB (r1 + r2) (g1 + g2) (b1 + b2)
+
+  (-) (RGB r1 g1 b1) (RGB r2 g2 b2)
+        = RGB (r1 - r2) (g1 - g2) (b1 - b2)
+
+  (*) (RGB r1 g1 b1) (RGB r2 g2 b2)
+        = RGB (r1 * r2) (g1 * g2) (b1 * b2)
+
+  abs (RGB r1 g1 b1)
+        = RGB (abs r1) (abs g1) (abs b1)
+
+  signum (RGB r1 g1 b1)
+        = RGB (signum r1) (signum g1) (signum b1)
+
+  fromInteger i
+        = let f = fromInteger i
+          in  RGB f f f
+
+instance (Elt a, IsNum a) => Num (Exp (RGB a)) where
+  (+)           = lift2 ((+) :: RGB (Exp a) -> RGB (Exp a) -> RGB (Exp a))
+  (-)           = lift2 ((-) :: RGB (Exp a) -> RGB (Exp a) -> RGB (Exp a))
+  (*)           = lift2 ((*) :: RGB (Exp a) -> RGB (Exp a) -> RGB (Exp a))
+  abs           = lift1 (abs :: RGB (Exp a) -> RGB (Exp a))
+  signum        = lift1 (signum :: RGB (Exp a) -> RGB (Exp a))
+  fromInteger i = let f = constant (fromInteger i)
+                  in lift $ RGB f f f
+
+-- Represent colours in Accelerate as a 4-tuple
+--
+type instance EltRepr  (RGB a) = EltRepr (a, a, a)
+type instance EltRepr' (RGB a) = EltRepr (a, a, a)
+
+instance Elt a => Elt (RGB a) where
+  eltType (_ :: RGB a)          = eltType (undefined :: (a,a,a))
+  toElt c                       = let (r,g,b) = toElt c in RGB r g b
+  fromElt (RGB r g b)           = fromElt (r,g,b)
+
+  eltType' (_ :: RGB a)         = eltType' (undefined :: (a,a,a))
+  toElt' c                      = let (r,g,b) = toElt' c in RGB r g b
+  fromElt' (RGB r g b)          = fromElt' (r,g,b)
+
+instance IsTuple (RGB a) where
+  type TupleRepr (RGB a)        = ((((),a), a), a)
+  fromTuple (RGB r g b)         = ((((), r), g), b)
+  toTuple ((((),r),g),b)        = RGB r g b
+
+instance (Lift Exp a, Elt (Plain a)) => Lift Exp (RGB a) where
+  type Plain (RGB a)    = RGB (Plain a)
+  lift (RGB r g b)      = Exp . Tuple $ NilTup `SnocTup` lift r `SnocTup` lift g `SnocTup` lift b
+
+instance Elt a => Unlift Exp (RGB (Exp a)) where
+  unlift c      = let r = Exp $ SuccTupIdx (SuccTupIdx ZeroTupIdx) `Prj` c
+                      g = Exp $ SuccTupIdx ZeroTupIdx `Prj` c
+                      b = Exp $ ZeroTupIdx `Prj` c
+                  in RGB r g b
 
 
 -- | Make a custom color. All components are clamped to the range  [0..1].

@@ -25,8 +25,8 @@ import Prelude                                  as P
 import Data.Typeable
 import Data.Array.Accelerate                    as A
 import Data.Array.Accelerate.Smart
-import Data.Array.Accelerate.Tuple              ( Tuple(..), TupleIdx(..), IsTuple(..), )
-import Data.Array.Accelerate.Array.Sugar        ( Elt(..), EltRepr, EltRepr' )
+import Data.Array.Accelerate.Product              ( TupleIdx(..), IsProduct(..), )
+import Data.Array.Accelerate.Array.Sugar        ( Elt(..), EltRepr, EltRepr', Tuple(..) )
 
 
 -- | An abstract point value on the xy-plane.
@@ -69,10 +69,11 @@ instance Elt a => Elt (XY a) where
   toElt' p              = let (x,y) = toElt' p in XY x y
   fromElt' (XY x y)     = fromElt' (x,y)
 
-instance IsTuple (XY a) where
-  type TupleRepr (XY a) = (((),a), a)
-  fromTuple (XY x y)    = (((), x), y)
-  toTuple (((),x),y)    = XY x y
+instance Elt a => IsProduct Elt (XY a) where
+  type ProdRepr (XY a) = (((),a), a)
+  fromProd _ (XY x y)      = (((), x), y)
+  toProd   _ (((),x),y)    = XY x y
+  prod cst _               = prod cst (undefined :: (a,a))
 
 instance (Lift Exp a, Elt (Plain a)) => Lift Exp (XY a) where
   type Plain (XY a) = XY (Plain a)

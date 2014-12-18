@@ -9,7 +9,8 @@ import Foreign.ForeignPtr
 import System.IO.Unsafe
 
 -- Gloss
-import Graphics.Gloss.Data.Picture                      ( Picture(..), bitmapOfForeignPtr )
+import Graphics.Gloss.Rendering                         ( bitmapOfForeignPtr )
+import Graphics.Gloss.Data.Picture                      ( Picture(..) )
 
 -- Accelerate
 import Data.Array.Accelerate                            as A

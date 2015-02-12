@@ -46,7 +46,7 @@ bitmapOfArray arrPixels cacheMe
         -- Wrap the array data in a Foreign pointer and turn into a Gloss picture
         {-# NOINLINE rawData #-}
         rawData         = let (Array _ adata)   = arrPixels
-                              ((),ptr)          = ptrsOfArrayData adata
+                              ptr               = ptrsOfArrayData adata
                           in
                           unsafePerformIO       $ newForeignPtr_ (castPtr ptr)
 

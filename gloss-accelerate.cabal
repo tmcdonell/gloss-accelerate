@@ -24,7 +24,7 @@ Library
         Graphics.Gloss.Accelerate.Data.Point
 
   Build-depends:
-        base                    >= 4.6 && < 4.8,
+        base                    >= 4.6,
         accelerate              >= 0.15,
         gloss                   == 1.9.*,
         gloss-rendering         == 1.9.*

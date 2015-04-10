@@ -1,14 +1,12 @@
 language: haskell
 env:
     - GHC=7.8.4
-    - GHC=7.8.4 ACC=head
     - GHC=7.10.1 CABAL=1.22
-    - GHC=7.10.1 CABAL=1.22 ACC=head
-    - GHC=head CABAL=head ACC=head
+    - GHC=head CABAL=head
 
 matrix:
     allow_failures:
-        - env: GHC=head CABAL=head ACC=head
+        - env: GHC=head CABAL=head
 
 before_install:
     # If travis doesn't have the version of GHC that we want, get it from hvr's PPA
@@ -27,19 +25,11 @@ before_install:
             travis_retry sudo apt-get install -y cabal-install-${CABAL}
             export PATH=/opt/cabal/${CABAL}/bin:${PATH}
         fi
-    - |
-        if [ ${ACC} = "head" ]; then
-            travis_retry git clone https://github.com/tmcdonell/accelerate.git
-            DEPS=". ./accelerate"
-        fi
 
 install:
     - ghc --version
     - cabal --version
-    - cabal install --only-dependencies --enable-tests ${MODE} ${DEPS}
-    - | if [ ${DEPS} ]; then
-            cabal install ${DEPS}
-        fi
+    - cabal install --only-dependencies --enable-tests ${MODE}
 
 script:
     # Check the build

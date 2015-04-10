@@ -37,7 +37,9 @@ install:
     - ghc --version
     - cabal --version
     - cabal install --only-dependencies --enable-tests ${MODE} ${DEPS}
-    - if [ ${DEPS} ]; then cabal install ${DEPS}; fi
+    - | if [ ${DEPS} ]; then
+            cabal install ${DEPS}
+        fi
 
 script:
     # Check the build

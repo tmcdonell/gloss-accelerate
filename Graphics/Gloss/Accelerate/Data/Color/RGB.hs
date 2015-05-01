@@ -44,8 +44,8 @@ import Data.Bits
 import Data.Typeable
 import Data.Array.Accelerate                    as A
 import Data.Array.Accelerate.Smart
-import Data.Array.Accelerate.Product              ( TupleIdx(..), IsProduct(..) )
-import Data.Array.Accelerate.Array.Sugar        ( Elt(..), EltRepr, EltRepr', Tuple(..) )
+import Data.Array.Accelerate.Tuple              ( Tuple(..), TupleIdx(..), IsTuple(..), )
+import Data.Array.Accelerate.Array.Sugar        ( Elt(..), EltRepr, EltRepr' )
 
 
 -- | An abstract color value.
@@ -108,11 +108,10 @@ instance Elt a => Elt (RGB a) where
   toElt' c                      = let (r,g,b) = toElt' c in RGB r g b
   fromElt' (RGB r g b)          = fromElt' (r,g,b)
 
-instance Elt a => IsProduct Elt (RGB a) where
-  type ProdRepr (RGB a)          = ((((),a), a), a)
-  fromProd _ (RGB r g b)         = ((((), r), g), b)
-  toProd _ ((((),r),g),b)        = RGB r g b
-  prod cst _                     = prod cst (undefined :: (a,a,a))
+instance IsTuple (RGB a) where
+  type TupleRepr (RGB a)        = ((((),a), a), a)
+  fromTuple (RGB r g b)         = ((((), r), g), b)
+  toTuple ((((),r),g),b)        = RGB r g b
 
 instance (Lift Exp a, Elt (Plain a)) => Lift Exp (RGB a) where
   type Plain (RGB a)    = RGB (Plain a)

@@ -44,8 +44,8 @@ import Data.Bits
 import Data.Typeable
 import Data.Array.Accelerate                    as A
 import Data.Array.Accelerate.Smart
-import Data.Array.Accelerate.Product            ( TupleIdx(..), IsProduct(..) )
-import Data.Array.Accelerate.Array.Sugar        ( Elt(..), EltRepr, Tuple(..) )
+import Data.Array.Accelerate.Product              ( TupleIdx(..), IsProduct(..) )
+import Data.Array.Accelerate.Array.Sugar        ( Elt(..), EltRepr, EltRepr', Tuple(..) )
 
 
 -- | An abstract color value.
@@ -96,12 +96,17 @@ instance (Elt a, IsNum a) => Num (Exp (RGB a)) where
 
 -- Represent colours in Accelerate as a 4-tuple
 --
-type instance EltRepr (RGB a) = EltRepr (a, a, a)
+type instance EltRepr  (RGB a) = EltRepr (a, a, a)
+type instance EltRepr' (RGB a) = EltRepr (a, a, a)
 
 instance Elt a => Elt (RGB a) where
   eltType (_ :: RGB a)          = eltType (undefined :: (a,a,a))
   toElt c                       = let (r,g,b) = toElt c in RGB r g b
   fromElt (RGB r g b)           = fromElt (r,g,b)
+
+  eltType' (_ :: RGB a)         = eltType' (undefined :: (a,a,a))
+  toElt' c                      = let (r,g,b) = toElt' c in RGB r g b
+  fromElt' (RGB r g b)          = fromElt' (r,g,b)
 
 instance Elt a => IsProduct Elt (RGB a) where
   type ProdRepr (RGB a)          = ((((),a), a), a)

@@ -1,16 +1,26 @@
 language: haskell
 env:
+  global:
+    - SHA_ACCELERATE=4d181866db677d0bb0fad0aa3224d8856c5a0911
+    - URL_ACCELERATE=https://github.com/AccelerateHS/accelerate.git
+
+  matrix:
     - GHC=7.8.4
-    - GHC=7.8.4 ACC=head
     - GHC=7.10.1 CABAL=1.22
-    - GHC=7.10.1 CABAL=1.22 ACC=head
-    - GHC=head CABAL=head ACC=head
+    - GHC=head CABAL=head
 
 matrix:
-    allow_failures:
-        - env: GHC=head CABAL=head ACC=head
+  allow_failures:
+    - env: GHC=head CABAL=head
 
 before_install:
+    # Fetch accelerate dependencies
+    - echo "Checking out dependencies"
+    - travis_retry git clone ${URL_ACCELERATE} deps/accelerate
+    - pushd deps/accelerate
+    - git reset --hard ${SHA_ACCELERATE}
+    - popd
+
     # If travis doesn't have the version of GHC that we want, get it from hvr's PPA
     - echo "Setting up GHC"
     - travis_retry sudo add-apt-repository -y ppa:hvr/ghc
@@ -27,19 +37,12 @@ before_install:
             travis_retry sudo apt-get install -y cabal-install-${CABAL}
             export PATH=/opt/cabal/${CABAL}/bin:${PATH}
         fi
-    - |
-        if [ ${ACC} = "head" ]; then
-            travis_retry git clone https://github.com/tmcdonell/accelerate.git
-            DEPS=". ./accelerate"
-        fi
 
 install:
     - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
     - cabal --version
-    - cabal install --only-dependencies --enable-tests ${MODE} ${DEPS}
-    - | if [ ${DEPS} ]; then
-            cabal install ${DEPS}
-        fi
+    - cabal install ${MODE} deps/*
+    - cabal install --only-dependencies --enable-tests ${MODE}
 
 script:
     # Check the build

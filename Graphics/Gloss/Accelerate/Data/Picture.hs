@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 
 module Graphics.Gloss.Accelerate.Data.Picture
   where
@@ -9,8 +10,7 @@ import Foreign.ForeignPtr
 import System.IO.Unsafe
 
 -- Gloss
-import Graphics.Gloss.Rendering                         ( bitmapOfForeignPtr )
-import Graphics.Gloss.Data.Picture                      ( Picture(..) )
+import Graphics.Gloss.Rendering
 
 -- Accelerate
 import Data.Array.Accelerate                            as A
@@ -36,7 +36,7 @@ import Data.Array.Accelerate.Array.Sugar                ( Array(..) )
 --       4. Copy the CUDA result directly to the mapped texture
 --
 bitmapOfArray
-    :: Array DIM2 Word32                -- The array data
+    :: Array DIM2 Word32                -- The array data (packed RGBA)
     -> Bool                             -- Should the image be cached between frames?
     -> Picture
 bitmapOfArray arrPixels cacheMe
@@ -50,9 +50,18 @@ bitmapOfArray arrPixels cacheMe
                           in
                           unsafePerformIO       $ newForeignPtr_ (castPtr ptr)
 
+#if MIN_VERSION_gloss_rendering(1,10,0)
+        fmt             = BitmapFormat TopToBottom PxRGBA
+        pic             = bitmapOfForeignPtr
+                              sizeX sizeY               -- image size
+                              fmt                       -- image format
+                              rawData                   -- raw image data
+                              cacheMe
+#else
         pic             = bitmapOfForeignPtr
                               sizeX sizeY               -- raw image size
                               rawData                   -- the image data
                               cacheMe
+#endif
     in pic
 

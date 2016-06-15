@@ -42,9 +42,9 @@ module Graphics.Gloss.Accelerate.Data.Color.RGBA (
 ) where
 
 import Prelude                                  as P
-import Data.Bits
 import Data.Typeable
 import Data.Array.Accelerate                    as A
+import Data.Array.Accelerate.Data.Bits          as A
 import Data.Array.Accelerate.Smart
 import Data.Array.Accelerate.Product            ( TupleIdx(..), IsProduct(..), )
 import Data.Array.Accelerate.Array.Sugar        ( Elt(..), EltRepr, Tuple(..) )
@@ -65,10 +65,10 @@ type Color = RGBA Float
 -- RGBA (Exp a).
 --
 data RGBA a = RGBA a a a a
-  deriving (Show, Eq, Typeable)
+  deriving (Show, P.Eq, Typeable)
 
 
-instance Num a => Num (RGBA a) where
+instance P.Num a => P.Num (RGBA a) where
   (+) (RGBA r1 g1 b1 _) (RGBA r2 g2 b2 _)
         = RGBA (r1 + r2) (g1 + g2) (b1 + b2) 1
 
@@ -88,14 +88,14 @@ instance Num a => Num (RGBA a) where
         = let f = fromInteger i
           in  RGBA f f f 1
 
-instance (Elt a, IsNum a) => Num (Exp (RGBA a)) where
+instance A.Num a => P.Num (Exp (RGBA a)) where
   (+)           = lift2 ((+) :: RGBA (Exp a) -> RGBA (Exp a) -> RGBA (Exp a))
   (-)           = lift2 ((-) :: RGBA (Exp a) -> RGBA (Exp a) -> RGBA (Exp a))
   (*)           = lift2 ((*) :: RGBA (Exp a) -> RGBA (Exp a) -> RGBA (Exp a))
   abs           = lift1 (abs :: RGBA (Exp a) -> RGBA (Exp a))
   signum        = lift1 (signum :: RGBA (Exp a) -> RGBA (Exp a))
-  fromInteger i = let f = constant (fromInteger i)
-                      a = constant 1
+  fromInteger i = let f = fromInteger i
+                      a = fromInteger 1 :: Exp a
                   in lift $ RGBA f f f a
 
 -- Represent colours in Accelerate as a 4-tuple
@@ -177,7 +177,7 @@ rgbaOfColor c
 clampColor :: Exp Color -> Exp Color
 clampColor cc
   = let (r, g, b, a)    = rgbaOfColor cc
-    in  rawColor (min 1 r) (min 1 g) (min 1 b) (min 1 a)
+    in  rawColor (A.min 1 r) (A.min 1 g) (A.min 1 b) (A.min 1 a)
 
 
 -- | Normalise a color to the value of its largest RGB component.

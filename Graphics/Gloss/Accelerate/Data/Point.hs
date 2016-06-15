@@ -37,7 +37,7 @@ type Point = XY Float
 -- Exp (Point' a) and Point' (Exp a).
 --
 data XY a = XY a a
-  deriving (Show, Eq, Typeable)
+  deriving (Show, P.Eq, Typeable)
 
 -- | Pretend a point is a number.
 --
@@ -45,7 +45,7 @@ data XY a = XY a a
 -- the multiply and divide field operators. We can pretend they are though, and
 -- use the (+) and (-) operators as component-wise addition and subtraction.
 --
-instance Num a => Num (XY a) where
+instance P.Num a => P.Num (XY a) where
   (+) (XY x1 y1) (XY x2 y2)             = XY (x1 + x2) (y1 + y2)
   (-) (XY x1 y1) (XY x2 y2)             = XY (x1 - x2) (y1 - y2)
   (*) (XY x1 y1) (XY x2 y2)             = XY (x1 * x2) (y1 * y2)
@@ -152,8 +152,8 @@ pointInBox p0 p1 p2
         XY x1 y1        = unlift p1
         XY x2 y2        = unlift p2
     in
-    x0 >=* min x1 x2 &&*
-    x0 <=* max x1 x2 &&*
-    y0 >=* min y1 y2 &&*
-    y0 <=* max y1 y2
+    x0 >=* A.min x1 x2 &&*
+    x0 <=* A.max x1 x2 &&*
+    y0 >=* A.min y1 y2 &&*
+    y0 <=* A.max y1 y2
 

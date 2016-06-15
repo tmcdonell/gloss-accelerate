@@ -24,10 +24,10 @@ Library
         Graphics.Gloss.Accelerate.Data.Point
 
   Build-depends:
-        base                    >= 4.6,
-        accelerate              >= 0.15,
-        gloss                   == 1.9.*,
-        gloss-rendering         == 1.9.*
+        base                    >= 4.6
+      , accelerate              >= 0.16
+      , gloss                   >= 1.9
+      , gloss-rendering         >= 1.9
 
 --  if flag(cuda)
 --    cpp-options:                -DACCELERATE_CUDA_BACKEND

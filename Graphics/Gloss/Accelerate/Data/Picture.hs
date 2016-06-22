@@ -36,7 +36,7 @@ import Data.Array.Accelerate.Array.Sugar                ( Array(..) )
 --       4. Copy the CUDA result directly to the mapped texture
 --
 bitmapOfArray
-    :: Array DIM2 Word32                -- The array data (packed RGBA)
+    :: Array DIM2 Word32                -- The array data (packed ABGR)
     -> Bool                             -- Should the image be cached between frames?
     -> Picture
 bitmapOfArray arrPixels cacheMe
@@ -51,16 +51,16 @@ bitmapOfArray arrPixels cacheMe
                           unsafePerformIO       $ newForeignPtr_ (castPtr ptr)
 
 #if MIN_VERSION_gloss_rendering(1,10,0)
-        fmt             = BitmapFormat TopToBottom PxRGBA
+        fmt             = BitmapFormat BottomToTop PxABGR   -- assume little-endian host
         pic             = bitmapOfForeignPtr
-                              sizeX sizeY               -- image size
-                              fmt                       -- image format
-                              rawData                   -- raw image data
+                              sizeX sizeY                   -- image size
+                              fmt                           -- image format
+                              rawData                       -- raw image data
                               cacheMe
 #else
         pic             = bitmapOfForeignPtr
-                              sizeX sizeY               -- raw image size
-                              rawData                   -- the image data
+                              sizeX sizeY                   -- raw image size
+                              rawData                       -- the image data
                               cacheMe
 #endif
     in pic

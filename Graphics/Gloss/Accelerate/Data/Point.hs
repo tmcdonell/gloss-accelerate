@@ -21,12 +21,13 @@ module Graphics.Gloss.Accelerate.Data.Point (
 
 ) where
 
-import Prelude                                  as P
-import Data.Typeable
 import Data.Array.Accelerate                    as A
 import Data.Array.Accelerate.Smart
 import Data.Array.Accelerate.Product            ( TupleIdx(..), IsProduct(..), )
 import Data.Array.Accelerate.Array.Sugar        ( Elt(..), EltRepr, Tuple(..) )
+
+import Data.Typeable
+import qualified Prelude                        as P
 
 
 -- | An abstract point value on the xy-plane.
@@ -37,7 +38,7 @@ type Point = XY Float
 -- Exp (Point' a) and Point' (Exp a).
 --
 data XY a = XY a a
-  deriving (Show, P.Eq, Typeable)
+  deriving (P.Show, P.Eq, Typeable)
 
 -- | Pretend a point is a number.
 --
@@ -152,8 +153,8 @@ pointInBox p0 p1 p2
         XY x1 y1        = unlift p1
         XY x2 y2        = unlift p2
     in
-    x0 >=* A.min x1 x2 &&*
-    x0 <=* A.max x1 x2 &&*
-    y0 >=* A.min y1 y2 &&*
-    y0 <=* A.max y1 y2
+    x0 >= min x1 x2 &&
+    x0 <= max x1 x2 &&
+    y0 >= min y1 y2 &&
+    y0 <= max y1 y2
 

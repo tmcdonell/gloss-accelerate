@@ -27,6 +27,7 @@ import Data.Array.Accelerate.Product            ( TupleIdx(..), IsProduct(..), )
 import Data.Array.Accelerate.Array.Sugar        ( Elt(..), EltRepr, Tuple(..) )
 
 import Data.Typeable
+import Prelude                                  ( fromInteger )   -- ghc < 8 bug
 import qualified Prelude                        as P
 
 

@@ -16,7 +16,7 @@ Library
         Graphics.Gloss.Accelerate.Data.Point
 
   Build-depends:
-        base                    >= 4.6
+        base                    >= 4.6 && < 4.10
       , accelerate              >= 0.16
       , gloss                   >= 1.9
       , gloss-rendering         >= 1.9
@@ -29,6 +29,11 @@ Library
 
 source-repository head
   type:                         git
+  location:                     https://github.com/tmcdonell/gloss-accelerate
+
+source-repository this
+  type:                         git
+  tag:                          0.2.0.0
   location:                     https://github.com/tmcdonell/gloss-accelerate
 
 -- vim: nospell

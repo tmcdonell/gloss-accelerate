@@ -63,7 +63,7 @@ instance P.Num a => P.Num (XY a) where
   signum (XY x y)                       = XY (signum x) (signum y)
   abs (XY x y)                          = XY (abs x) (abs y)
   negate (XY x y)                       = XY (negate x) (negate y)
-  fromInteger i                         = let f = fromInteger i
+  fromInteger i                         = let f = P.fromInteger i
                                           in  XY f f
 
 -- Represent points in Accelerate as a tuple

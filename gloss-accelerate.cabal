@@ -10,6 +10,9 @@ Category:               Graphics
 Build-type:             Simple
 Cabal-version:          >=1.10
 
+extra-source-files:
+    README.md
+
 Library
   Exposed-modules:
         Graphics.Gloss.Accelerate.Data.Picture

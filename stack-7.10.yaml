@@ -1,22 +1,22 @@
 # For more information, see: http://docs.haskellstack.org/en/stable/yaml_configuration.html
 # vim: nospell
 
-resolver: lts-6.30
+resolver: lts-6.35
 
 packages:
 - '.'
 
 extra-deps:
-- 'accelerate-1.0.0.0'
+- 'accelerate-1.1.1.0'
 - 'gloss-1.11.1.1'
 - 'gloss-rendering-1.11.1.1'
 - 'unique-0'
 
 # Override default flag values for local packages and extra-deps
-flags: {}
+# flags: {}
 
 # Extra package databases containing global packages
-extra-package-dbs: []
+# extra-package-dbs: []
 
 # Control whether we use the GHC we find on the path
 # system-ghc: true

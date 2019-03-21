@@ -11,7 +11,7 @@ extra-deps:
   commit: cfa1f48bef0e8d5bf2bec60a11ade2cac2153a9d
 
 - git:    https://github.com/tmcdonell/linear-accelerate.git
-  commit: 9ab37d5bbdaa0c12e87138581ed17e3bcb44ec88
+  commit: 78d6e834f38443da5c99b7be5d27bbd498ebd020
 
 - primitive-0.6.4.0
 

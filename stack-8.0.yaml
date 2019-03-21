@@ -1,12 +1,26 @@
 # For more information, see: https://github.com/commercialhaskell/stack/blob/release/doc/yaml_configuration.md
 # vim: nospell
 
-resolver: lts-9.0
+resolver: lts-9.21
 
 packages:
-- '.'
+- .
 
-# extra-deps: []
+extra-deps:
+- git:    https://github.com/tmcdonell/accelerate.git
+  commit: cfa1f48bef0e8d5bf2bec60a11ade2cac2153a9d
+
+- git:    https://github.com/tmcdonell/linear-accelerate.git
+  commit: 9ab37d5bbdaa0c12e87138581ed17e3bcb44ec88
+
+- GLURaw-2.0.0.4
+- half-0.3
+- hashtables-1.2.3.1
+- OpenGL-3.0.2.2
+- OpenGLRaw-3.3.2.0
+- prettyprinter-1.2.1
+- primitive-0.6.4.0
+
 
 # Override default flag values for local packages and extra-deps
 # flags: {}

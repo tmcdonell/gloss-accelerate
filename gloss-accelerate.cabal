@@ -19,10 +19,11 @@ Library
         Graphics.Gloss.Accelerate.Data.Point
 
   Build-depends:
-        base                    >= 4.6 && < 4.12
-      , accelerate              >= 0.16
+        base                    >= 4.9 && < 5
+      , accelerate              >= 1.3
       , gloss                   >= 1.9
       , gloss-rendering         >= 1.9
+      , linear-accelerate       >= 0.7
 
   ghc-options:
         -Wall

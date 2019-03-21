@@ -1,10 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable    #-}
-{-# LANGUAGE FlexibleContexts      #-}
-{-# LANGUAGE FlexibleInstances     #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE ScopedTypeVariables   #-}
-{-# LANGUAGE TypeFamilies          #-}
-{-# LANGUAGE UndecidableInstances  #-}
 -- |
 -- Module      : Graphics.Gloss.Accelerate.Data.Point
 -- Copyright   : [2013..2017] Trevor L. McDonell
@@ -31,65 +24,14 @@ module Graphics.Gloss.Accelerate.Data.Point (
 ) where
 
 import Data.Array.Accelerate                    as A
-import Data.Array.Accelerate.Smart
-import Data.Array.Accelerate.Product            ( TupleIdx(..), IsProduct(..), )
-import Data.Array.Accelerate.Array.Sugar        ( Elt(..), EltRepr, Tuple(..) )
+import Data.Array.Accelerate.Linear.V2
 
-import Data.Typeable
-import Prelude                                  ( fromInteger )   -- ghc < 8 bug
 import qualified Prelude                        as P
 
 
 -- | An abstract point value on the xy-plane.
 --
-type Point = XY Float
-
--- | A parameterised point in the xy-plane. This is so that the type can be both
--- Exp (Point' a) and Point' (Exp a).
---
-data XY a = XY a a
-  deriving (P.Show, P.Eq, Typeable)
-
--- | Pretend a point is a number.
---
--- Vectors aren't real numbers according to Haskell, because they don't support
--- the multiply and divide field operators. We can pretend they are though, and
--- use the (+) and (-) operators as component-wise addition and subtraction.
---
-instance P.Num a => P.Num (XY a) where
-  (+) (XY x1 y1) (XY x2 y2)             = XY (x1 + x2) (y1 + y2)
-  (-) (XY x1 y1) (XY x2 y2)             = XY (x1 - x2) (y1 - y2)
-  (*) (XY x1 y1) (XY x2 y2)             = XY (x1 * x2) (y1 * y2)
-  signum (XY x y)                       = XY (signum x) (signum y)
-  abs (XY x y)                          = XY (abs x) (abs y)
-  negate (XY x y)                       = XY (negate x) (negate y)
-  fromInteger i                         = let f = P.fromInteger i
-                                          in  XY f f
-
--- Represent points in Accelerate as a tuple
---
-type instance EltRepr (XY a) = EltRepr (a, a)
-
-instance Elt a => Elt (XY a) where
-  eltType (_ :: XY a)   = eltType (undefined :: (a,a))
-  toElt p               = let (x,y) = toElt p in XY x y
-  fromElt (XY x y)      = fromElt (x,y)
-
-instance Elt a => IsProduct Elt (XY a) where
-  type ProdRepr (XY a) = (((),a), a)
-  fromProd _ (XY x y)      = (((), x), y)
-  toProd   _ (((),x),y)    = XY x y
-  prod cst _               = prod cst (undefined :: (a,a))
-
-instance (Lift Exp a, Elt (Plain a)) => Lift Exp (XY a) where
-  type Plain (XY a) = XY (Plain a)
-  lift (XY x y)         = Exp . Tuple $ NilTup `SnocTup` lift x `SnocTup` lift y
-
-instance Elt a => Unlift Exp (XY (Exp a)) where
-  unlift p      = let x = Exp $ SuccTupIdx ZeroTupIdx `Prj` p
-                      y = Exp $ ZeroTupIdx `Prj` p
-                  in XY x y
-
+type Point = V2 Float
 
 -- | Make a custom point
 --
@@ -97,7 +39,7 @@ makePoint
     :: Exp Float                -- ^ x-coordinate
     -> Exp Float                -- ^ y-coordinate
     -> Exp Point
-makePoint x y = lift (XY x y)
+makePoint = V2'
 
 
 -- | Take the components of a point
@@ -105,9 +47,7 @@ makePoint x y = lift (XY x y)
 xyOfPoint
     :: Exp Point
     -> (Exp Float, Exp Float)
-xyOfPoint p
-  = let XY x y  = unlift p
-    in  (x, y)
+xyOfPoint (V2' x y) = (x, y)
 
 
 -- | Convert a two-dimensional index into a point centered in a plane of the
@@ -158,13 +98,9 @@ pointInBox
     -> Exp Point                -- ^ corner of box
     -> Exp Point                -- ^ opposite corner of box
     -> Exp Bool
-pointInBox p0 p1 p2
-  = let XY x0 y0        = unlift p0
-        XY x1 y1        = unlift p1
-        XY x2 y2        = unlift p2
-    in
-    x0 >= min x1 x2 &&
-    x0 <= max x1 x2 &&
-    y0 >= min y1 y2 &&
-    y0 <= max y1 y2
+pointInBox (V2' x0 y0) (V2' x1 y1) (V2' x2 y2) =
+  x0 >= min x1 x2 &&
+  x0 <= max x1 x2 &&
+  y0 >= min y1 y2 &&
+  y0 <= max y1 y2
 

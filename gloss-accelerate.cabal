@@ -1,5 +1,5 @@
 Name:                   gloss-accelerate
-Version:                2.0.0.1
+Version:                2.1.0.0
 Synopsis:               Extras to interface Gloss and Accelerate
 Description:            Extras to interface Gloss and Accelerate
 License:                BSD3
@@ -37,7 +37,7 @@ source-repository head
 
 source-repository this
   type:                         git
-  tag:                          v2.0.0.1
+  tag:                          v2.1.0.0
   location:                     https://github.com/tmcdonell/gloss-accelerate
 
 -- vim: nospell

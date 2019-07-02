@@ -7,11 +7,11 @@ packages:
 - .
 
 extra-deps:
-- git:    https://github.com/tmcdonell/accelerate.git
-  commit: cfa1f48bef0e8d5bf2bec60a11ade2cac2153a9d
+- github: tmcdonell/accelerate
+  commit: 5c2c1db205fcf1e0777ef9399959100b75e7bbec
 
-- git:    https://github.com/tmcdonell/linear-accelerate.git
-  commit: 78d6e834f38443da5c99b7be5d27bbd498ebd020
+- github: tmcdonell/linear-accelerate
+  commit: 7d3bb1d40cdcc75f2f658c31b2eb7541c949e52e
 
 - primitive-0.6.4.0
 

@@ -39,7 +39,7 @@ makePoint
     :: Exp Float                -- ^ x-coordinate
     -> Exp Float                -- ^ y-coordinate
     -> Exp Point
-makePoint = V2'
+makePoint = V2_
 
 
 -- | Take the components of a point
@@ -47,7 +47,7 @@ makePoint = V2'
 xyOfPoint
     :: Exp Point
     -> (Exp Float, Exp Float)
-xyOfPoint (V2' x y) = (x, y)
+xyOfPoint (V2_ x y) = (x, y)
 
 
 -- | Convert a two-dimensional index into a point centered in a plane of the
@@ -98,7 +98,7 @@ pointInBox
     -> Exp Point                -- ^ corner of box
     -> Exp Point                -- ^ opposite corner of box
     -> Exp Bool
-pointInBox (V2' x0 y0) (V2' x1 y1) (V2' x2 y2) =
+pointInBox (V2_ x0 y0) (V2_ x1 y1) (V2_ x2 y2) =
   x0 >= min x1 x2 &&
   x0 <= max x1 x2 &&
   y0 >= min y1 y2 &&

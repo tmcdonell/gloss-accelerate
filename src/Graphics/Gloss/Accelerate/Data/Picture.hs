@@ -1,4 +1,3 @@
-{-# LANGUAGE CPP #-}
 -- |
 -- Module      : Graphics.Gloss.Accelerate.Data.Picture
 -- Copyright   : [2013..2017] Trevor L. McDonell
@@ -54,18 +53,11 @@ bitmapOfArray arrPixels cacheMe
                           in
                           castForeignPtr ptr
 
-#if MIN_VERSION_gloss_rendering(1,10,0)
-        fmt             = BitmapFormat BottomToTop PxRGBA   -- assume little-endian host
+        fmt             = BitmapFormat TopToBottom PxRGBA   -- assume little-endian host
         pic             = bitmapOfForeignPtr
                               sizeX sizeY                   -- image size
                               fmt                           -- image format
                               rawData                       -- raw image data
                               cacheMe
-#else
-        pic             = bitmapOfForeignPtr
-                              sizeX sizeY                   -- raw image size
-                              rawData                       -- the image data
-                              cacheMe
-#endif
     in pic
 

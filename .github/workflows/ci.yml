@@ -49,6 +49,11 @@ jobs:
         path: ${{ steps.stack-setup.outputs.stack-root }}
         key: ${{ runner.os }}-${{ matrix.ghc }}-stack
 
+    - name: Setup (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get -y install freeglut3-dev
+
     - name: Build dependencies
       run: |
         stack build $STACK_FLAGS --test --no-run-tests --only-dependencies

@@ -12,24 +12,21 @@
 module Graphics.Gloss.Accelerate.Data.Picture
   where
 
--- Standard library
-import Prelude                                          as P
-import Foreign.Ptr
-import Foreign.ForeignPtr
-import System.IO.Unsafe
+import Data.Array.Accelerate                                        as A
+import Data.Array.Accelerate.Array.Unique
+import Data.Array.Accelerate.Lifetime
+import Data.Array.Accelerate.Sugar.Array
+import qualified Data.Array.Accelerate.Representation.Array         as R
 
--- Gloss
 import Graphics.Gloss.Rendering
 
--- Accelerate
-import Data.Array.Accelerate                            as A
-import Data.Array.Accelerate.Array.Data                 ( ptrsOfArrayData )
-import Data.Array.Accelerate.Array.Sugar                ( Array(..) )
+import Foreign.ForeignPtr
 
 
--- | Use an Accelerate array of RGBA data as a bitmap image. If the image is
---   generated programatically every frame, then the second parameter should be
---   `False`. If you have loaded it from static data then use `True`.
+-- | Use an Accelerate array of RGBA data as a bitmap image. If the image
+-- is generated programatically every frame, then the second parameter
+-- should be `False`. If you have loaded it from static data then use
+-- `True`.
 --
 
 -- TODO:
@@ -50,14 +47,12 @@ bitmapOfArray
     -> Picture
 bitmapOfArray arrPixels cacheMe
   = let -- Size of the raw image
-        Z :. sizeY :. sizeX     = arrayShape arrPixels
+        Z :. sizeY :. sizeX = arrayShape arrPixels
 
-        -- Wrap the array data in a Foreign pointer and turn into a Gloss picture
-        {-# NOINLINE rawData #-}
-        rawData         = let (Array _ adata)   = arrPixels
-                              ptr               = ptrsOfArrayData adata
+        rawData         = let Array (R.Array _ adata) = arrPixels
+                              ptr                     = unsafeGetValue (uniqueArrayData adata)
                           in
-                          unsafePerformIO       $ newForeignPtr_ (castPtr ptr)
+                          castForeignPtr ptr
 
 #if MIN_VERSION_gloss_rendering(1,10,0)
         fmt             = BitmapFormat BottomToTop PxRGBA   -- assume little-endian host

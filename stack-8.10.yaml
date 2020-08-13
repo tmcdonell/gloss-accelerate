@@ -16,12 +16,6 @@ extra-deps:
 - github: tmcdonell/linear-accelerate
   commit: e0956017d938a05f2ef4180b364f4d2cd71eb5b9
 
-- github: tmcdonell/accelerate-io
-  commit: 1ba4c7db50c255b327e5d037c4c52bb0c1a297fc
-  subdirs:
-    - accelerate-io-bmp
-    - accelerate-io-bytestring
-
 # Override default flag values for local packages and extra-deps
 # flags: {}
 

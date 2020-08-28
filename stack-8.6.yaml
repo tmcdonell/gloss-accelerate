@@ -7,11 +7,8 @@ packages:
 - .
 
 extra-deps:
-- github: tmcdonell/accelerate
-  commit: cc4ae666548cb0340e6eb30de41ca6b869e8809b
-
-- github: tmcdonell/linear-accelerate
-  commit: e0956017d938a05f2ef4180b364f4d2cd71eb5b9
+- accelerate-1.3.0.0
+- linear-accelerate-0.7.0.0
 
 # Override default flag values for local packages and extra-deps
 # flags: {}
